@@ -1,0 +1,24 @@
+{
+  "name": "@zixcel/local-registry",
+  "version": "0.10.0",
+  "type": "module",
+  "license": "Apache-2.0",
+  "description": "Offline Cargo artifact storage with immutable verified generations",
+  "files": [
+    "cargo",
+    "README.md",
+    "!**/*.tgz",
+    "LICENSE",
+    "NOTICE"
+  ],
+  "exports": {
+    "./storage": "./cargo/storage.mjs",
+    "./verification": "./cargo/verification.mjs",
+    "./configuration": "./cargo/configuration.mjs",
+    "./cargo-index": "./cargo/cargo-index.mjs",
+    "./cleanup": "./cargo/cleanup.mjs"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}
