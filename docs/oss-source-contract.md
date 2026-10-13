@@ -35,3 +35,5 @@ Use the package scripts/owner CI above and the repository README for exact comma
 ## Acceptance record
 
 Inventory baseline source: `065adb5b1db0bbe8d4c23e905f20527e75ca2382`. This baseline records observed files and declared interfaces, not a completed audit. Subsequent source changes are accepted at their exact commit with test evidence. Production hosting, account login, secret custody installation and data migration remain outside source-only acceptance.
+
+Rust source acceptance also runs [.github/workflows/rust-source.yml](../.github/workflows/rust-source.yml): locked all-target/all-feature tests, formatting and Clippy. This is functional source validation and does not publish an artifact or operate a real account.
