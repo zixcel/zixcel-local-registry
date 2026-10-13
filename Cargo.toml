@@ -7,7 +7,7 @@ rust-version = "1.97"
 description = "Bounded artifact import and publication contracts for local registries"
 license = "Apache-2.0"
 readme = "README.md"
-publish = ["zixcel-private"]
+publish = false
 
 [package.metadata.zixcel]
 boundary = "local-artifact-registry-contracts"
