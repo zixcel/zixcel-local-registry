@@ -1,0 +1,133 @@
+{
+  "repository": "zixcel/zixcel-local-registry",
+  "purpose": "Validate imported artifacts and record where they may be distributed and what publication evidence exists.",
+  "responsibility_boundary": "Own the named reusable integration/data mechanism. Product roles/UI and operational approvals stay with consumers; transport/custody reuse managed Crowsi components where capabilities fit. Planning-only APIs must remain clearly distinguished from implemented external operations.",
+  "packages": [
+    {
+      "manifest": "Cargo.toml",
+      "package": "zixcel-local-registry",
+      "ecosystem": "rust",
+      "description": "Bounded artifact import and publication contracts for local registries",
+      "interfaces": {
+        "lib": "src/lib.rs",
+        "features": {},
+        "bins": [],
+        "public_modules": [],
+        "public_reexports": [
+          "model::{\n    ArtifactKind, ImportReceipt, ImportRequest, ImportSource, ImportSourceKind, PublicationTarget,\n    RegistryInterfaceKind, RegistryPurpose, VerificationState,\n}",
+          "validation::{ValidationReport, validate_import_receipt, validate_import_request}"
+        ],
+        "implicit_bins": []
+      },
+      "declared_commands": {}
+    },
+    {
+      "manifest": "package.json",
+      "package": "@zixcel/local-registry",
+      "ecosystem": "npm",
+      "description": "Offline Cargo artifact storage with immutable verified generations",
+      "interfaces": {
+        "exports": {
+          "./storage": "./cargo/storage.mjs",
+          "./verification": "./cargo/verification.mjs",
+          "./configuration": "./cargo/configuration.mjs",
+          "./cargo-index": "./cargo/cargo-index.mjs",
+          "./cleanup": "./cargo/cleanup.mjs"
+        },
+        "bin": {},
+        "main": null,
+        "types": null
+      },
+      "declared_commands": {}
+    }
+  ],
+  "schema_definitions": [],
+  "test_sources": [
+    "cargo/storage.mjs",
+    "cargo/verification.mjs",
+    "src/validation.rs",
+    "tests/contracts.rs"
+  ],
+  "example_sources": [],
+  "workflow_definitions": [
+    {
+      "path": ".github/workflows/oss-policy.yml",
+      "jobs": [
+        {
+          "job": "repository-policy",
+          "condition": null,
+          "runs_on": "ubuntu-latest",
+          "steps": [
+            {
+              "name": null,
+              "run": null,
+              "uses": "actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803",
+              "condition": null
+            },
+            {
+              "name": "Verify repository policy",
+              "run": "python3 .github/oss-policy-check.py",
+              "uses": null,
+              "condition": null
+            },
+            {
+              "name": "Verify policy regression tests",
+              "run": "cd .github && python3 -m unittest discover -s policy-tests",
+              "uses": null,
+              "condition": null
+            },
+            {
+              "name": "Check policy types",
+              "run": "python3 -m venv \"$RUNNER_TEMP/policy-types\"\n\"$RUNNER_TEMP/policy-types/bin/pip\" install -r .github/policy/requirements.txt\n\"$RUNNER_TEMP/policy-types/bin/mypy\" --strict .github/policy .github/oss-policy-check.py .github/policy-tests\n",
+              "uses": null,
+              "condition": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": ".github/workflows/rust-source.yml",
+      "jobs": [
+        {
+          "job": "source",
+          "condition": null,
+          "runs_on": "ubuntu-24.04",
+          "steps": [
+            {
+              "name": null,
+              "run": null,
+              "uses": "actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803",
+              "condition": null
+            },
+            {
+              "name": "Install declared Rust tooling",
+              "run": "rustup toolchain install 1.97.1 --profile minimal --component rustfmt --component clippy",
+              "uses": null,
+              "condition": null
+            },
+            {
+              "name": "Test every maintained source target and feature",
+              "run": "cargo +1.97.1 test --locked --all-targets --all-features",
+              "uses": null,
+              "condition": null
+            },
+            {
+              "name": "Check source formatting",
+              "run": "cargo +1.97.1 fmt --all -- --check",
+              "uses": null,
+              "condition": null
+            },
+            {
+              "name": "Check all source targets",
+              "run": "cargo +1.97.1 clippy --locked --all-targets --all-features -- -D warnings",
+              "uses": null,
+              "condition": null
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "evidence_policy": "Declarations and source paths are not proof of an executed acceptance. Exact CI head and result are recorded separately. No live accounts or production acceptance is inferred."
+}
