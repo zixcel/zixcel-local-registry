@@ -20,5 +20,9 @@
   },
   "engines": {
     "node": ">=22"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zixcel/zixcel-local-registry.git"
   }
 }
